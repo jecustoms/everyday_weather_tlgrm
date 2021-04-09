@@ -103,12 +103,24 @@ def day_evening_forecast(weather_request):
     return day_message + '\n\n' + evening_message + '\n\n'
 
 
-def random_func_name_get_current_time(weather_request):  # new name needed -_-
+def generate_message(weather, hour):
+    if hour <= 12:
+        text = (
+            good_morning() + current_weather_obj_parser(weather)
+            + sunset_sunrise_time(weather)
+            + day_evening_forecast(weather)
+        )
+    else:
+        text = 'Добрый вечер!\n\n' + current_weather_obj_parser(weather)
+    return text
+
+
+def get_current_server_time(weather_request):
     logger.debug('Получаем текущее время сервера')
     server_time = weather_request.get('now_dt')
     hour = server_time[11:13]
     minute = server_time[14:16]
-    return hour, minute
+    return int(hour), int(minute)
 
 
 def main():
@@ -117,22 +129,15 @@ def main():
     while True:
         try:
             weather = get_weather()
-            hour, minute = random_func_name_get_current_time(weather)
+            hour, minute = get_current_server_time(weather)
             weekday = datetime.now().weekday()
-            if weather:
-                text = (
-                    good_morning() + current_weather_obj_parser(weather)
-                    + sunset_sunrise_time(weather)
-                    + day_evening_forecast(weather)
-                )
-                if 0 <= weekday <= 4 and (
-                    hour == '05' and (0 <= int(minute) <= 20)
-                ):
-                    send_message(text, bot_client)
-                elif 5 <= weekday <= 6 and (
-                    hour == '07' and (0 <= int(minute) <= 20)
-                ):
-                    send_message(text, bot_client)
+            message = generate_message(weather, hour)
+            if 0 <= weekday <= 4 and hour == 5 and (0 <= minute <= 20):
+                send_message(message, bot_client)
+            elif 5 <= weekday <= 6 and hour == 7 and (0 <= minute <= 20):
+                send_message(message, bot_client)
+            elif hour == 16 and (0 <= minute <= 20):
+                send_message(message, bot_client)
             time.sleep(1200)  # запрос раз в 20 минут
         except Exception as error:
             logger.error(error, exc_info=True)
