@@ -126,11 +126,11 @@ def main():
                     + day_evening_forecast(weather)
                 )
                 if 0 <= weekday <= 4 and (
-                    hour == '5' and (0 <= int(minute) <= 20)
+                    hour == '05' and (0 <= int(minute) <= 20)
                 ):
                     send_message(text, bot_client)
                 elif 5 <= weekday <= 6 and (
-                    hour == '7' and (0 <= int(minute) <= 20)
+                    hour == '07' and (0 <= int(minute) <= 20)
                 ):
                     send_message(text, bot_client)
             time.sleep(1200)  # запрос раз в 20 минут
