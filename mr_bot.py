@@ -115,12 +115,18 @@ def generate_message(weather, hour):
     return text
 
 
-def get_current_server_time(weather_request):
-    # logger.debug('Получаем текущее время сервера')
-    server_time = weather_request.get('now_dt')
-    hour = server_time[11:13]
-    minute = server_time[14:16]
-    return int(hour), int(minute)
+# def get_current_server_time(weather_request):
+#     # logger.debug('Получаем текущее время сервера')
+#     server_time = weather_request.get('now_dt')
+#     hour = server_time[11:13]
+#     minute = server_time[14:16]
+#     return int(hour), int(minute)
+
+
+def get_weather_and_make_message(hour):
+    weather = get_weather()
+    message = generate_message(weather, hour)
+    return message
 
 
 def main():
@@ -128,21 +134,22 @@ def main():
     bot_client = telegram.Bot(TELEGRAM_TOKEN)
     while True:
         try:
-            weather = get_weather()
-            hour, minute = get_current_server_time(weather)
+            # hour, minute = get_current_server_time(weather)
+            dt = datetime.now().timetuple()
+            hour, minute = dt[3], dt[4]
             weekday = datetime.now().weekday()
-            message = generate_message(weather, hour)
             if 0 <= weekday <= 4 and hour == 5 and (0 <= minute <= 20):
-                send_message(message, bot_client)
+                send_message(get_weather_and_make_message(hour), bot_client)
             elif 5 <= weekday <= 6 and hour == 7 and (0 <= minute <= 20):
-                send_message(message, bot_client)
+                send_message(get_weather_and_make_message(hour), bot_client)
             elif hour == 16 and (0 <= minute <= 20):
-                send_message(message, bot_client)
+                send_message(get_weather_and_make_message(hour), bot_client)
+            requests.get('http://yandex.ru')
             time.sleep(1200)  # запрос раз в 20 минут
         except Exception as error:
             # logger.error(error, exc_info=True)
             send_message(f'Бот столкнулся с ошибкой {error}', bot_client)
-            time.sleep(50)
+            time.sleep(100)
     # logger.debug('Отсановка бота')
 
 
