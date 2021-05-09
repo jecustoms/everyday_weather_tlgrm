@@ -1,4 +1,4 @@
-import logging
+# import logging
 import os
 import requests
 import telegram
@@ -10,11 +10,11 @@ from dotenv import load_dotenv
 from dictionaries import weather_conditions, months
 
 
-logging.basicConfig(
-    level=logging.DEBUG, filename='telegram_bot.log',
-    format='%(asctime)s %(name)s %(levelname)s: %(message)s'
-)
-logger = logging.getLogger(__name__)
+# logging.basicConfig(
+#     level=logging.DEBUG, filename='telegram_bot.log',
+#     format='%(asctime)s %(name)s %(levelname)s: %(message)s'
+# )
+# logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -39,7 +39,7 @@ def good_morning():
 
 
 def get_weather():
-    logger.debug('Погода запрошена')
+    # logger.debug('Погода запрошена')
     headers = {'X-Yandex-API-Key': TOKEN}
     params = {'lat': '55.794249', 'lon': '37.404034'}  # lat and lon for Moscow
     try:
@@ -50,12 +50,12 @@ def get_weather():
 
 
 def send_message(message, bot_client):
-    logger.info(f'Отрпавлено сообщение: {message}')
+    # logger.info(f'Отрпавлено сообщение: {message}')
     return bot_client.send_message(CHAT_ID, message)
 
 
 def current_weather_obj_parser(weather_request):
-    logger.debug('Парсинг текущей погоды')
+    # logger.debug('Парсинг текущей погоды')
     weather_object = weather_request.get('fact')
     temperature = weather_object.get('temp')
     feels_like = weather_object.get('feels_like')
@@ -71,7 +71,7 @@ def current_weather_obj_parser(weather_request):
 
 
 def sunset_sunrise_time(weather_request):
-    logger.debug('Парсинг восхода и заката')
+    # logger.debug('Парсинг восхода и заката')
     weather_object = weather_request.get('forecasts')
     sunrise = weather_object[0].get('sunrise')
     sunset = weather_object[0].get('sunset')
@@ -82,7 +82,7 @@ def sunset_sunrise_time(weather_request):
 
 
 def day_evening_forecast(weather_request):
-    logger.debug('Парсинг прогноза погода днем и вечером')
+    # logger.debug('Парсинг прогноза погода днем и вечером')
     weather_object = weather_request.get('forecasts')
     day_object = weather_object[0].get('parts')['day']
     temperature = day_object.get('temp_avg')
@@ -116,7 +116,7 @@ def generate_message(weather, hour):
 
 
 def get_current_server_time(weather_request):
-    logger.debug('Получаем текущее время сервера')
+    # logger.debug('Получаем текущее время сервера')
     server_time = weather_request.get('now_dt')
     hour = server_time[11:13]
     minute = server_time[14:16]
@@ -124,7 +124,7 @@ def get_current_server_time(weather_request):
 
 
 def main():
-    logger.debug('Запуск бота')
+    # logger.debug('Запуск бота')
     bot_client = telegram.Bot(TELEGRAM_TOKEN)
     while True:
         try:
@@ -140,10 +140,10 @@ def main():
                 send_message(message, bot_client)
             time.sleep(1200)  # запрос раз в 20 минут
         except Exception as error:
-            logger.error(error, exc_info=True)
+            # logger.error(error, exc_info=True)
             send_message(f'Бот столкнулся с ошибкой {error}', bot_client)
             time.sleep(50)
-    logger.debug('Отсановка бота')
+    # logger.debug('Отсановка бота')
 
 
 if __name__ == '__main__':
