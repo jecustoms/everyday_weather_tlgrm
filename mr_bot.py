@@ -22,7 +22,7 @@ TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 CHAT_ID = os.getenv('CHAT_ID')
 TOKEN = os.getenv('TOKEN')
 
-URL = 'https://api.weather.yandex.ru/v2/forecast'
+URL = 'https://api.weather.yandex.ru/v2/informers/'
 
 
 class CustomsError(Exception):
@@ -72,9 +72,9 @@ def current_weather_obj_parser(weather_request):
 
 def sunset_sunrise_time(weather_request):
     # logger.debug('Парсинг восхода и заката')
-    weather_object = weather_request.get('forecasts')
-    sunrise = weather_object[0].get('sunrise')
-    sunset = weather_object[0].get('sunset')
+    weather_object = weather_request.get('forecast')
+    sunrise = weather_object.get('sunrise')
+    sunset = weather_object.get('sunset')
     message = (
         f'Восход: {sunrise}\nЗакат: {sunset}'
     )
@@ -83,8 +83,8 @@ def sunset_sunrise_time(weather_request):
 
 def day_evening_forecast(weather_request):
     # logger.debug('Парсинг прогноза погода днем и вечером')
-    weather_object = weather_request.get('forecasts')
-    day_object = weather_object[0].get('parts')['day']
+    weather_object = weather_request.get('forecast')
+    day_object = weather_object.get('parts')[0]
     temperature = day_object.get('temp_avg')
     feels_like = day_object.get('feels_like')
     condition = weather_conditions[day_object.get('condition')]
@@ -92,7 +92,7 @@ def day_evening_forecast(weather_request):
         f'Днем ожидается {condition}, температура {temperature} '
         f'°C. Будет ощущаться как {feels_like} °C.'
     )
-    evening_object = weather_object[0].get('parts')['evening']
+    evening_object = weather_object.get('parts')[1]
     temperature = evening_object.get('temp_avg')
     feels_like = evening_object.get('feels_like')
     condition = weather_conditions[evening_object.get('condition')]
