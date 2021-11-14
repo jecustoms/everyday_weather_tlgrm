@@ -35,7 +35,7 @@ def good_morning():
         f'Доброе утро! Сегодня {current_datetime.day} '
         f'{months[current_datetime.month]} {current_datetime.year} года.'
     )
-    return message + '\n\n'
+    return message
 
 
 def get_weather():
@@ -67,7 +67,7 @@ def current_weather_obj_parser(weather_request):
     )
     if water_temp is not None:
         message += 'Температура воды: {water_temp}'
-    return message + '\n\n'
+    return message + '\n'
 
 
 def sunset_sunrise_time(weather_request):
@@ -78,7 +78,7 @@ def sunset_sunrise_time(weather_request):
     message = (
         f'Восход: {sunrise}\nЗакат: {sunset}'
     )
-    return message + '\n\n'
+    return message + '\n'
 
 
 def day_evening_forecast(weather_request):
@@ -100,7 +100,7 @@ def day_evening_forecast(weather_request):
         f'Вечером ожидается {condition}, температура {temperature} '
         f'°C. Будет ощущаться как {feels_like} °C.'
     )
-    return day_message + '\n\n' + evening_message + '\n\n'
+    return day_message + '\n' + evening_message + '\n'
 
 
 def generate_message(weather, hour):
@@ -111,7 +111,7 @@ def generate_message(weather, hour):
             + day_evening_forecast(weather)
         )
     else:
-        text = 'Добрый вечер!\n\n' + current_weather_obj_parser(weather)
+        text = 'Добрый вечер!' + current_weather_obj_parser(weather)
     return text
 
 
