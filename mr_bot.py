@@ -89,18 +89,18 @@ def day_evening_forecast(weather_request):
     feels_like = day_object.get('feels_like')
     condition = weather_conditions[day_object.get('condition')]
     day_message = (
-        f'Днем ожидается {condition}, температура {temperature} '
-        f'°C. Будет ощущаться как {feels_like} °C.'
+        f'Днем будет {condition}, температура {temperature} '
+        f'°C. По ощущениям как {feels_like} °C.'
     )
     evening_object = weather_object.get('parts')[1]
     temperature = evening_object.get('temp_avg')
     feels_like = evening_object.get('feels_like')
     condition = weather_conditions[evening_object.get('condition')]
     evening_message = (
-        f'Вечером ожидается {condition}, температура {temperature} '
-        f'°C. Будет ощущаться как {feels_like} °C.'
+        f'Вечером будет {condition}, температура {temperature} '
+        f'°C. По ощущениям как {feels_like} °C.'
     )
-    return day_message + '\n' + evening_message + '\n'
+    return day_message + evening_message + '\n'
 
 
 def generate_message(weather, hour):
