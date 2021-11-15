@@ -62,7 +62,7 @@ def current_weather_obj_parser(weather_request):
     condition = weather_conditions[weather_object.get('condition')]
     water_temp = weather_object.get('temp_water')
     message = (
-        f'Сейчас {condition} и температура на улице составляет {temperature} '
+        f' Сейчас {condition} и температура на улице составляет {temperature} '
         f'°C, что ощущается как {feels_like} °C.'
     )
     if water_temp is not None:
@@ -100,7 +100,7 @@ def day_evening_forecast(weather_request):
         f'Вечером будет {condition}, температура {temperature} '
         f'°C. По ощущениям как {feels_like} °C.'
     )
-    return day_message + evening_message + '\n'
+    return day_message + ' ' + evening_message + '\n'
 
 
 def generate_message(weather, hour):
